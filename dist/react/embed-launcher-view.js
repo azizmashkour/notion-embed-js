@@ -123,7 +123,11 @@ export function EmbedLauncherRadixView({ cfg, buildInner, context, bridge, }) {
                     display: 'flex',
                     flexDirection: 'column',
                     overflow: 'hidden',
-                    borderRadius: 16,
+                    borderTop: '0.5px solid #e8e6e3',
+                    borderRight: '1px solid #edebe9',
+                    borderBottom: '1px solid #edebe9',
+                    borderLeft: '1px solid #edebe9',
+                    borderRadius: 10,
                 }, "aria-label": cfg.panelTitle, children: _jsxs("div", { "data-notion-embed-launcher-panel": "", style: {
                         display: 'flex',
                         flexDirection: 'column',
@@ -136,7 +140,9 @@ export function EmbedLauncherRadixView({ cfg, buildInner, context, bridge, }) {
                                 justifyContent: 'space-between',
                                 gap: 12,
                                 padding: '12px 14px',
-                                borderBottom: '1px solid #edebe9',
+                                borderBottom: '0.5px solid #e8e6e3',
+                                borderTopLeftRadius: 10,
+                                borderTopRightRadius: 10,
                                 flexShrink: 0,
                                 fontFamily: 'system-ui,-apple-system,Segoe UI,Roboto,sans-serif',
                             }, children: [_jsx("div", { style: { fontWeight: 600, fontSize: 16, color: '#242424' }, children: cfg.panelTitle }), _jsx("button", { type: "button", "aria-label": "Close", onClick: () => setOpen(false), style: {

@@ -189,7 +189,11 @@ export function EmbedLauncherRadixView({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          borderRadius: 16,
+          borderTop: '0.5px solid #e8e6e3',
+          borderRight: '1px solid #edebe9',
+          borderBottom: '1px solid #edebe9',
+          borderLeft: '1px solid #edebe9',
+          borderRadius: 10,
         }}
         aria-label={cfg.panelTitle}
       >
@@ -210,7 +214,9 @@ export function EmbedLauncherRadixView({
               justifyContent: 'space-between',
               gap: 12,
               padding: '12px 14px',
-              borderBottom: '1px solid #edebe9',
+              borderBottom: '0.5px solid #e8e6e3',
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
               flexShrink: 0,
               fontFamily: 'system-ui,-apple-system,Segoe UI,Roboto,sans-serif',
             }}

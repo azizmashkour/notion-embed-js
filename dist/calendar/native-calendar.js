@@ -6,12 +6,14 @@ import { mountCalendarChipPeek, mountDayAgendaPeek } from '../react/mount-calend
 const EXTRA_STYLES = `
 .nec-toolbar--mobile{align-items:flex-start;flex-direction:column;flex-wrap:nowrap}
 .nec-toolbar-mobile-head{display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:100%;min-width:0}
-.nec-view-select{font:inherit;font-size:0.875rem;padding:4px 8px;border-radius:2px;border:1px solid var(--nec-control-border);background:var(--nec-button-bg);color:var(--nec-text);width:max-content;max-width:100%}
+.nec-view-select{font:inherit;font-size:0.875rem;padding:6px 10px;border-radius:6px;border:1px solid var(--nec-control-border);background:var(--nec-button-bg);color:var(--nec-text);width:max-content;max-width:100%}
 .nec-toolbar-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;min-width:0}
+.nec-toolbar-nav{flex-wrap:nowrap;align-items:stretch}
+.nec-toolbar-nav .nec-view-select{flex:1 1 0;min-width:0;width:auto;max-width:none;align-self:center}
 .nec-toolbar-desktop-top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;min-width:0}
 .nec-toolbar-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0;max-width:100%}
-.nec-view-tabs{display:inline-flex;flex-wrap:wrap;max-width:100%;border-radius:2px;border:1px solid var(--nec-control-border);background:var(--nec-week-header-bg);padding:2px;gap:0}
-.nec-view-tab{cursor:pointer;border:none;font:inherit;font-size:0.875rem;padding:6px 12px;border-radius:2px;background:transparent;color:var(--nec-text)}
+.nec-view-tabs{display:inline-flex;flex-wrap:wrap;max-width:100%;border-radius:6px;border:1px solid var(--nec-control-border);background:var(--nec-week-header-bg);padding:3px;gap:2px}
+.nec-view-tab{cursor:pointer;border:none;font:inherit;font-size:0.875rem;padding:6px 12px;border-radius:5px;background:transparent;color:var(--nec-text)}
 .nec-view-tab:hover{background:rgba(255,255,255,0.9)}
 .nec-view-tab--active{background:var(--nec-blue);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
 .nec-view-tab--active:hover{background:var(--nec-blue);color:#fff}
@@ -92,11 +94,11 @@ const EXTRA_STYLES = `
 `;
 const BASE_STYLES = `
 .nec-root{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.4;color:var(--nec-text);background:var(--nec-surface);border:1px solid var(--nec-border);border-radius:var(--nec-root-radius);box-sizing:border-box;box-shadow:var(--nec-card-shadow);display:flex;flex-direction:column;min-height:inherit;height:100%;overflow:hidden;container-type:inline-size;container-name:nec-cal}
-.nec-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:1px solid var(--nec-border)}
+.nec-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:1px solid var(--nec-border);position:relative;z-index:4}
 @media (min-width:640px){.nec-toolbar{padding:10px 20px}}
 .nec-title{flex:1;min-width:0;max-width:100%;font-size:1.25rem;font-weight:600;letter-spacing:-0.025em;color:var(--nec-text-strong)}
 .nec-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.nec-btn-today{cursor:pointer;font:inherit;font-size:0.875rem;font-weight:400;padding:6px 12px;border-radius:2px;border:1px solid var(--nec-control-border);background:var(--nec-button-bg);color:var(--nec-text)}
+.nec-btn-today{cursor:pointer;font:inherit;font-size:0.875rem;font-weight:400;padding:6px 12px;border-radius:6px;border:1px solid var(--nec-control-border);background:var(--nec-button-bg);color:var(--nec-text)}
 .nec-btn-today:hover{background:#f3f2f1}
 .nec-btn-today:active{background:#edebe9}
 .nec-btn-round{cursor:pointer;font:inherit;display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:8px;border:none;border-radius:9999px;background:transparent;color:var(--nec-text);font-size:1.25rem;line-height:1}
@@ -402,10 +404,9 @@ export function renderNativeCalendar(mount, options) {
                 viewMode = sel.value;
                 render();
             });
-            head.appendChild(sel);
             const row = document.createElement('div');
-            row.className = 'nec-toolbar-row';
-            row.append(todayBtn, prevBtn, nextBtn);
+            row.className = 'nec-toolbar-row nec-toolbar-nav';
+            row.append(todayBtn, prevBtn, sel, nextBtn);
             toolbar.append(head, row);
         }
         else {
