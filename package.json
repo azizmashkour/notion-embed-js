@@ -41,8 +41,18 @@
   "dependencies": {
     "@notionhq/client": "^5.17.0"
   },
+  "peerDependencies": {
+    "@radix-ui/react-popover": "^1.1.14",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
   "devDependencies": {
+    "@radix-ui/react-popover": "^1.1.14",
     "@types/node": "^20.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.3.0",
     "vitest": "^1.0.0",
     "jsdom": "^23.0.0"
