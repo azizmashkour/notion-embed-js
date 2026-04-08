@@ -10,8 +10,8 @@ Release history: [CHANGELOG.md](./CHANGELOG.md).
 - **Calendar embed (iframe)** – Published Notion calendar view, full-width in its container
 - **Calendar API (native UI)** – Server-side fetch via official Notion client; browser renders a month grid (no API key in the client)
 - **Color palette** – Optional `calendarPalette` / `defaultNotionCalendarPalette` for the native calendar
-- **Floating launcher** – Optional `launcher: true` (or config): rounded corner button fixed on the viewport; opens a **Radix UI Popover** (modal) with the same embed, using the same border/shadow treatment as the chai.org popover primitive
-- **Outlook-style event peek** – In **`calendar-api`** mode, each event chip opens an **anchored `@radix-ui/react-popover`** whose layout matches the former **chai.org `CalendarEventPeek`** sample (blue top bar, Clock / Location / Notes rows, optional link row—using your event’s `linkUrl`, not a Notion page URL)
+- **Floating launcher** – Optional `launcher: true` (or config): rounded corner button fixed on the viewport; opens a **Radix UI Popover** (modal) with the same embed, using a Fluent-style border and layered shadow
+- **Outlook-style event peek** – In **`calendar-api`** mode, each event chip opens an **anchored `@radix-ui/react-popover`** with a Microsoft 365–style layout (accent top bar, Clock / Location / Notes rows, optional “Read more” link using your event’s `linkUrl`, not a Notion page URL)
 - **TypeScript** – Full type definitions included
 
 **Peer dependencies (browser):** install **`react`**, **`react-dom`**, and **`@radix-ui/react-popover`** alongside this package. They power **`calendar-api`** (Outlook-style peeks) and **`launcher`** (modal panel). The main `createEmbed` bundle references that module graph, so your package manager should resolve those peers even if you only use iframe **page** / **calendar** mode (unused code may be tree-shaken by your bundler). The server entry **`notion-embed-js/server`** only needs **`@notionhq/client`**.
@@ -476,7 +476,7 @@ src/
 │   ├── in/           # Primary: createEmbed, embedInto (API entry points)
 │   └── out/          # Secondary: UrlValidatorAdapter, DomEmbedRendererAdapter, etc.
 ├── calendar/         # Native month grid (mounts Radix peeks via react/)
-├── react/            # Radix Popover, Outlook peek UI, launcher shell (chai.org–aligned)
+├── react/            # Radix Popover, Outlook peek UI, launcher shell
 ├── widget/           # Launcher mount (createRoot + Radix popover)
 ├── server/           # Notion API fetch (Node; uses @notionhq/client)
 ├── notion-calendar/  # Shared event type
