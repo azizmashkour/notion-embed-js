@@ -1,5 +1,13 @@
 # notion-embed-js
 
+## 1.2.0
+
+### Minor Changes
+
+- **Calendar API**: Day view with a 24-hour timeline and colored timed blocks; Work week, Week, and Month grids; desktop inline view tabs; mobile defaults to Day (today), hides Month, uses a compact `width: max-content` view select with left-aligned title row, and horizontal scroll with three visible day columns plus snap for week-style layouts.
+- **Exports**: `VIEW_OPTIONS`, `calendarViewOptionsForMobile`, `CALENDAR_MOBILE_MAX_PX`, and `formatCalendarPeriodTitle` for integrators.
+- **Tooling**: Prettier, ESLint (flat config), and `pnpm test:coverage` via `@vitest/coverage-v8`.
+
 ## 1.1.0
 
 ### Minor Changes
