@@ -69,3 +69,41 @@ export function formatEventTime(iso: string): string {
     return '';
   }
 }
+
+const PEEK_NOTES_FALLBACK =
+  'Agenda and other details are in Notion—open the page for the full notes.';
+
+/** Plain-text notes line for Outlook-style peek (matches chai.org CalendarEventPeek). */
+export function outlookPeekNotesBody(description: string | undefined): string {
+  const t = description?.trim();
+  return t && t.length > 0 ? t : PEEK_NOTES_FALLBACK;
+}
+
+/** Outlook-style “when” line (locale-aware), from chai.org CalendarEventPeek. */
+export function formatOutlookWhen(ev: NotionCalendarEvent): string {
+  const start = parseNotionDate(ev.start);
+  const startDay = ev.start.slice(0, 10);
+  const endDay = ev.end ? ev.end.slice(0, 10) : startDay;
+  const isAllDay = ev.start.length <= 10;
+
+  const dateFmt = new Intl.DateTimeFormat(undefined, {
+    weekday: 'short',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  if (isAllDay) {
+    if (ev.end && endDay !== startDay) {
+      return `${dateFmt.format(start)} – ${dateFmt.format(parseNotionDate(ev.end))} (All day)`;
+    }
+    return `${dateFmt.format(start)} (All day)`;
+  }
+
+  const timeFmt = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
+  const startTime = timeFmt.format(start);
+  if (ev.end && ev.end.length > 10) {
+    return `${dateFmt.format(start)} ${startTime} – ${timeFmt.format(parseNotionDate(ev.end))}`;
+  }
+  return `${dateFmt.format(start)} ${startTime}`;
+}
