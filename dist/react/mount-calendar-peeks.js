@@ -2,9 +2,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { createRoot } from 'react-dom/client';
 import { CalendarChipPopover } from './calendar-chip-popover.js';
 import { DayAgendaPopover } from './day-agenda-popover.js';
-export function mountCalendarChipPeek(host, event) {
+export function mountCalendarChipPeek(host, event, options) {
     const root = createRoot(host);
-    root.render(_jsx(CalendarChipPopover, { event: event }));
+    root.render(_jsx(CalendarChipPopover, { event: event, triggerClassName: options?.triggerClassName, triggerStyle: options?.triggerStyle }));
     return () => {
         root.unmount();
     };

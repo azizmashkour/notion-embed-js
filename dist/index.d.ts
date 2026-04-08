@@ -9,7 +9,8 @@ export { embedInto } from './adapters/in/embed-into.adapter.js';
 export type { NotionEmbedLauncherOptions, NotionEmbedLauncherPosition, NotionEmbedOptions, NotionEmbedResult, SegmentMap, WidgetMode, } from './types.js';
 export type { NotionCalendarEvent } from './notion-calendar/event.js';
 export type { NotionCalendarPalette } from './calendar/palette.types.js';
-export { defaultNotionCalendarPalette, mergeNotionCalendarPalette, } from './calendar/palette.js';
-export { calendarVisualTokens, WEEKDAYS_SUN } from './calendar/notion-calendar-constants.js';
-export { isValidNotionUrl, normalizeNotionUrl, isEmbeddableNotionUrl, } from './utils.js';
+export { defaultNotionCalendarPalette, mergeNotionCalendarPalette } from './calendar/palette.js';
+export { calendarVisualTokens, WEEKDAYS_SUN, VIEW_OPTIONS, calendarViewOptionsForMobile, CALENDAR_MOBILE_MAX_PX, } from './calendar/notion-calendar-constants.js';
+export { formatCalendarPeriodTitle } from './calendar/calendar-utils.js';
+export { isValidNotionUrl, normalizeNotionUrl, isEmbeddableNotionUrl } from './utils.js';
 //# sourceMappingURL=index.d.ts.map

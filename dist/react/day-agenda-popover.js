@@ -16,9 +16,7 @@ export function DayAgendaPopover({ events, anchorRect, onExit, }) {
                         width: Math.max(anchorRect.width, 1),
                         height: Math.max(anchorRect.height, 1),
                         pointerEvents: 'none',
-                    } }) }), _jsx(PopoverContent, { side: "bottom", align: "start", sideOffset: 8, collisionPadding: { top: 16, right: 16, bottom: 16, left: 16 }, "aria-label": events.length === 1
-                    ? events[0].title
-                    : `${events.length} calendar events`, style: {
+                    } }) }), _jsx(PopoverContent, { side: "bottom", align: "start", sideOffset: 8, collisionPadding: { top: 16, right: 16, bottom: 16, left: 16 }, "aria-label": events.length === 1 ? events[0].title : `${events.length} calendar events`, style: {
                     ...popoverContentBase,
                     maxHeight: 'min(85vh, 640px)',
                     overflowY: 'auto',

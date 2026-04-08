@@ -1,4 +1,4 @@
-import { normalizeNotionUrl, isValidNotionUrl, isEmbeddableNotionUrl, } from '../../utils.js';
+import { normalizeNotionUrl, isValidNotionUrl, isEmbeddableNotionUrl } from '../../utils.js';
 /**
  * Adapter: Standard Notion URL validation
  */

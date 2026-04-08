@@ -72,9 +72,7 @@ export class DomEmbedRendererAdapter {
                 currentSegment = segment;
             }
             : undefined;
-        const getActiveSegment = segments
-            ? () => currentSegment
-            : undefined;
+        const getActiveSegment = segments ? () => currentSegment : undefined;
         return {
             element: wrapper,
             destroy,

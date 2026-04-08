@@ -52,8 +52,7 @@ export class CreateEmbedUseCase {
                 getSegmentUrl: () => null,
             };
         }
-        const height = options.height ??
-            (mode === 'calendar' ? CALENDAR_DEFAULT_HEIGHT : DEFAULT_PAGE_HEIGHT);
+        const height = options.height ?? (mode === 'calendar' ? CALENDAR_DEFAULT_HEIGHT : DEFAULT_PAGE_HEIGHT);
         const width = options.width ?? '100%';
         const widthValue = typeof width === 'number' ? `${width}px` : width;
         const heightValue = typeof height === 'number' ? `${height}px` : height;

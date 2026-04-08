@@ -70,9 +70,7 @@ export function EmbedLauncherRadixView({ cfg, buildInner, context, bridge, }) {
                 pendingSegment.current = segment;
                 innerRef.current?.setSegment?.(segment);
             };
-            bridge.getActiveSegment = () => innerRef.current?.getActiveSegment?.() ??
-                pendingSegment.current ??
-                context.initialSegment;
+            bridge.getActiveSegment = () => innerRef.current?.getActiveSegment?.() ?? pendingSegment.current ?? context.initialSegment;
         }
         return () => {
             bridge.open = () => { };
@@ -90,8 +88,7 @@ export function EmbedLauncherRadixView({ cfg, buildInner, context, bridge, }) {
             const hostEl = embedHostRef.current;
             if (!hostEl)
                 return;
-            if (innerRef.current?.element.isConnected &&
-                hostEl.contains(innerRef.current.element)) {
+            if (innerRef.current?.element.isConnected && hostEl.contains(innerRef.current.element)) {
                 return;
             }
             if (innerRef.current) {

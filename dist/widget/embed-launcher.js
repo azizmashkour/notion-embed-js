@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
-import { EmbedLauncherRadixView, } from '../react/embed-launcher-view.js';
+import { EmbedLauncherRadixView } from '../react/embed-launcher-view.js';
 /**
  * Floating launcher + embed panel using Radix Popover (modal).
  */

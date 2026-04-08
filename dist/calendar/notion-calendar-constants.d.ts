@@ -25,4 +25,41 @@ export declare const calendarVisualTokens: {
     readonly monthCellMinHeight: "8.5rem";
 };
 export declare const WEEKDAYS_SUN: readonly ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+export declare const WORK_HEADERS: readonly ["Mo", "Tu", "We", "Th", "Fr"];
+/** Matches Tailwind `md` (768px). Viewport width ≤ this uses mobile calendar layout. */
+export declare const CALENDAR_MOBILE_MAX_PX = 767;
+export type CalendarViewMode = 'day' | 'workWeek' | 'week' | 'month';
+export declare const VIEW_OPTIONS: ReadonlyArray<{
+    mode: CalendarViewMode;
+    label: string;
+}>;
+/** Mobile hides month (3-column horizontal scroll for other views). */
+export declare function calendarViewOptionsForMobile(isMobile: boolean): typeof VIEW_OPTIONS;
+/** One row per hour; full 24h day (local). */
+export declare const HOUR_ROW_PX = 52;
+export declare const DAY_TIMELINE_HEIGHT_PX: number;
+export declare const CAL_MIN_HEIGHT: {
+    readonly month: "8.5rem";
+    readonly week: "18rem";
+    readonly workWeek: "20rem";
+};
+/** Solid fills for timed blocks (cycle by event id). */
+export declare const EVENT_RANGE_STYLES: readonly [{
+    readonly bg: "#006689";
+    readonly border: "#003e56";
+    readonly text: "#ffffff";
+}, {
+    readonly bg: "#6c9b35";
+    readonly border: "#6c9b35";
+    readonly text: "#ffffff";
+}, {
+    readonly bg: "#ff9933";
+    readonly border: "#ff9933";
+    readonly text: "#ffffff";
+}, {
+    readonly bg: "#003e56";
+    readonly border: "#9ed4e5";
+    readonly text: "#ffffff";
+}];
+export declare function rangeStyleForEventId(id: string): (typeof EVENT_RANGE_STYLES)[number];
 //# sourceMappingURL=notion-calendar-constants.d.ts.map
