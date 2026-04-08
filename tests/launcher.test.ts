@@ -11,9 +11,7 @@ describe('launcher widget', () => {
 
   afterEach(() => {
     container.remove();
-    document
-      .querySelectorAll('[data-notion-embed-launcher-root]')
-      .forEach((el) => el.remove());
+    document.querySelectorAll('[data-notion-embed-launcher-root]').forEach((el) => el.remove());
   });
 
   it('mounts floating button to body and skips container append when mountTarget is body', async () => {

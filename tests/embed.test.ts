@@ -60,12 +60,8 @@ describe('createEmbed', () => {
   });
 
   it('throws on notion.so URL (blocks iframe embedding)', () => {
-    expect(() =>
-      createEmbed({ url: 'https://www.notion.so/My-Page-abc123' })
-    ).toThrow('notion.so');
-    expect(() =>
-      createEmbed({ url: 'https://notion.so/Page-abc123' })
-    ).toThrow('notion.so');
+    expect(() => createEmbed({ url: 'https://www.notion.so/My-Page-abc123' })).toThrow('notion.so');
+    expect(() => createEmbed({ url: 'https://notion.so/Page-abc123' })).toThrow('notion.so');
   });
 
   it('applies custom className', () => {
