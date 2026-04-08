@@ -19,9 +19,11 @@ export function DayAgendaPopover({ events, anchorRect, onExit, }) {
                     } }) }), _jsx(PopoverContent, { side: "bottom", align: "start", sideOffset: 8, collisionPadding: { top: 16, right: 16, bottom: 16, left: 16 }, "aria-label": events.length === 1 ? events[0].title : `${events.length} calendar events`, style: {
                     ...popoverContentBase,
                     maxHeight: 'min(85vh, 640px)',
+                    overflowX: 'hidden',
                     overflowY: 'auto',
                     padding: 0,
                     width: 'min(calc(100vw - 1.5rem), 380px)',
+                    borderRadius: 4,
                 }, children: _jsx("div", { children: events.map((ev, i) => (_jsx("div", { style: {
                             borderBottom: i < events.length - 1 ? '1px solid #edebe9' : undefined,
                         }, children: _jsx(OutlookPeekContent, { event: ev }) }, ev.id))) }) })] }));

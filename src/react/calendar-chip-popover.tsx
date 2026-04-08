@@ -34,9 +34,11 @@ export function CalendarChipPopover({
         style={{
           ...popoverContentBase,
           maxHeight: 'min(85vh, 640px)',
+          overflowX: 'hidden',
           overflowY: 'auto',
           padding: 0,
           width: 'min(calc(100vw - 1.5rem), 380px)',
+          borderRadius: 4,
         }}
       >
         <OutlookPeekContent event={event} />

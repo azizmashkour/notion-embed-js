@@ -19,8 +19,15 @@ export function OutlookPeekContent({ event }: { event: NotionCalendarEvent }) {
   const link = event.linkUrl;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ height: 8, flexShrink: 0, background: PEEK_BRAND }} aria-hidden />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 4,
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ height: 6, flexShrink: 0, background: PEEK_BRAND }} aria-hidden />
 
       <div style={{ padding: '12px 16px 16px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>

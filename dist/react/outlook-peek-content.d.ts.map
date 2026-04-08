@@ -1,1 +1,1 @@
-{"version":3,"file":"outlook-peek-content.d.ts","sourceRoot":"","sources":["../../src/react/outlook-peek-content.tsx"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,mBAAmB,EAAE,MAAM,6BAA6B,CAAC;AAYvE,wBAAgB,kBAAkB,CAAC,EAAE,KAAK,EAAE,EAAE;IAAE,KAAK,EAAE,mBAAmB,CAAA;CAAE,2CAoJ3E"}
+{"version":3,"file":"outlook-peek-content.d.ts","sourceRoot":"","sources":["../../src/react/outlook-peek-content.tsx"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,mBAAmB,EAAE,MAAM,6BAA6B,CAAC;AAYvE,wBAAgB,kBAAkB,CAAC,EAAE,KAAK,EAAE,EAAE;IAAE,KAAK,EAAE,mBAAmB,CAAA;CAAE,2CA2J3E"}

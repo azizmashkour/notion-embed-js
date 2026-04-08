@@ -11,7 +11,12 @@ const borderHairline = '#edebe9';
 export function OutlookPeekContent({ event }) {
     const notesBody = outlookPeekNotesBody(event.description);
     const link = event.linkUrl;
-    return (_jsxs("div", { style: { display: 'flex', flexDirection: 'column' }, children: [_jsx("div", { style: { height: 8, flexShrink: 0, background: PEEK_BRAND }, "aria-hidden": true }), _jsxs("div", { style: { padding: '12px 16px 16px' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'flex-start', gap: 8 }, children: [_jsx("h4", { style: {
+    return (_jsxs("div", { style: {
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 4,
+            overflow: 'hidden',
+        }, children: [_jsx("div", { style: { height: 6, flexShrink: 0, background: PEEK_BRAND }, "aria-hidden": true }), _jsxs("div", { style: { padding: '12px 16px 16px' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'flex-start', gap: 8 }, children: [_jsx("h4", { style: {
                                     minWidth: 0,
                                     flex: 1,
                                     margin: 0,
