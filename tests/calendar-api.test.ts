@@ -102,9 +102,12 @@ describe('calendar-api mode', () => {
     await vi.waitFor(() => {
       expect(element.querySelector('.nec-day-view')).toBeTruthy();
     });
-    const sel = element.querySelector('.nec-view-select') as HTMLSelectElement;
-    expect(sel).toBeTruthy();
-    expect([...sel.options].map((o) => o.value)).not.toContain('month');
+    const dd = element.querySelector('[data-nec-view-dropdown]');
+    expect(dd).toBeTruthy();
+    const modes = [...dd!.querySelectorAll('[role="menuitem"]')].map(
+      (n) => (n as HTMLElement).dataset.mode
+    );
+    expect(modes).not.toContain('month');
     expect(element.querySelector('.nec-toolbar--mobile')).toBeTruthy();
     destroy();
   });

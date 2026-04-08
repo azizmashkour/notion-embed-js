@@ -31,10 +31,22 @@ import { mountCalendarChipPeek, mountDayAgendaPeek } from '../react/mount-calend
 const EXTRA_STYLES = `
 .nec-toolbar--mobile{align-items:flex-start;flex-direction:column;flex-wrap:nowrap}
 .nec-toolbar-mobile-head{display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:100%;min-width:0}
-.nec-view-select{font:inherit;font-size:0.875rem;padding:6px 10px;border-radius:6px;border:1px solid var(--nec-control-border);background:var(--nec-button-bg);color:var(--nec-text);width:max-content;max-width:100%}
+/* Tailwind UI–style simple dropdown (application-ui/elements/dropdowns), palette-matched */
+.nec-view-dd{position:relative;display:inline-flex;flex-direction:column;align-items:stretch;width:fit-content;max-width:100%;flex-shrink:0}
+.nec-view-dd-trigger{display:inline-flex;align-items:center;justify-content:space-between;gap:6px;font:inherit;font-size:0.875rem;font-weight:600;line-height:1.25;color:var(--nec-text-strong);padding:6px 10px;border-radius:8px;border:1px solid var(--nec-control-border);background:var(--nec-surface);box-shadow:0 1px 2px rgba(0,0,0,0.05);cursor:pointer;white-space:nowrap;width:auto;max-width:100%}
+.nec-view-dd-trigger:hover{background:#faf9f8}
+.nec-view-dd-trigger:focus-visible{outline:2px solid var(--nec-blue);outline-offset:2px}
+.nec-view-dd-trigger[aria-expanded="true"]{background:#f3f2f1}
+.nec-view-dd-chevron{width:1rem;height:1rem;flex-shrink:0;color:var(--nec-muted);transition:transform 0.15s ease}
+.nec-view-dd-trigger[aria-expanded="true"] .nec-view-dd-chevron{transform:rotate(180deg)}
+.nec-view-dd-panel{position:fixed;z-index:2147483646;margin:0;min-width:0;width:max-content;max-width:min(calc(100vw - 1.5rem),14rem);padding:4px 0;border-radius:8px;background:var(--nec-surface);box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1),0 0 0 1px rgba(0,0,0,0.05);box-sizing:border-box}
+.nec-view-dd-panel[hidden]{display:none!important}
+.nec-view-dd-item{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;font-size:0.875rem;font-weight:400;padding:8px 14px;color:var(--nec-text);background:transparent;border:none;cursor:pointer;white-space:nowrap}
+.nec-view-dd-item:hover,.nec-view-dd-item:focus{background:#f3f2f1;outline:none}
+.nec-view-dd-item:focus-visible{outline:2px solid var(--nec-blue);outline-offset:-2px}
+.nec-view-dd-item--active{font-weight:600;color:var(--nec-blue);background:rgba(0,102,137,0.08)}
 .nec-toolbar-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;min-width:0}
-.nec-toolbar-nav{flex-wrap:nowrap;align-items:stretch}
-.nec-toolbar-nav .nec-view-select{flex:1 1 0;min-width:0;width:auto;max-width:none;align-self:center}
+.nec-toolbar-nav{flex-wrap:nowrap;align-items:center}
 .nec-toolbar-desktop-top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;min-width:0}
 .nec-toolbar-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0;max-width:100%}
 .nec-view-tabs{display:inline-flex;flex-wrap:wrap;max-width:100%;border-radius:6px;border:1px solid var(--nec-control-border);background:var(--nec-week-header-bg);padding:3px;gap:2px}
@@ -211,14 +223,127 @@ export function renderNativeCalendar(
 
   const chipUnmounts: Array<() => void> = [];
   let closeDayAgenda: (() => void) | null = null;
+  let viewDropdownCleanup: (() => void) | null = null;
 
   const byDay = (): Map<string, NotionCalendarEvent[]> => buildEventsByDay(options.events);
+
+  function clearViewDropdownListeners(): void {
+    viewDropdownCleanup?.();
+    viewDropdownCleanup = null;
+  }
 
   function clearPeeks(): void {
     chipUnmounts.forEach((u) => u());
     chipUnmounts.length = 0;
     closeDayAgenda?.();
     closeDayAgenda = null;
+  }
+
+  /** Tailwind Plus–style “simple” menu dropdown; trigger width fits label + chevron. */
+  function createMobileViewDropdown(
+    viewChoices: ReadonlyArray<{ mode: CalendarViewMode; label: string }>,
+    currentMode: CalendarViewMode,
+    onSelect: (mode: CalendarViewMode) => void
+  ): HTMLDivElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'nec-view-dd';
+    wrap.setAttribute('data-nec-view-dropdown', '');
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'nec-view-dd-trigger';
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-label', 'Calendar view');
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'nec-view-dd-label';
+    const activeChoice = viewChoices.find((c) => c.mode === currentMode) ?? viewChoices[0]!;
+    labelSpan.textContent = activeChoice.label;
+
+    const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    chevron.setAttribute('class', 'nec-view-dd-chevron');
+    chevron.setAttribute('viewBox', '0 0 20 20');
+    chevron.setAttribute('fill', 'currentColor');
+    chevron.setAttribute('aria-hidden', 'true');
+    const chevronPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    chevronPath.setAttribute('fill-rule', 'evenodd');
+    chevronPath.setAttribute(
+      'd',
+      'M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'
+    );
+    chevron.appendChild(chevronPath);
+    trigger.append(labelSpan, chevron);
+
+    const panel = document.createElement('div');
+    panel.className = 'nec-view-dd-panel';
+    panel.setAttribute('role', 'menu');
+    panel.hidden = true;
+
+    for (const opt of viewChoices) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className =
+        'nec-view-dd-item' + (opt.mode === currentMode ? ' nec-view-dd-item--active' : '');
+      item.setAttribute('role', 'menuitem');
+      item.dataset.mode = opt.mode;
+      item.textContent = opt.label;
+      item.addEventListener('click', () => {
+        closePanel();
+        if (opt.mode !== currentMode) onSelect(opt.mode);
+      });
+      panel.appendChild(item);
+    }
+
+    function positionPanel(): void {
+      const r = trigger.getBoundingClientRect();
+      const gap = 4;
+      panel.style.left = `${Math.round(r.left)}px`;
+      panel.style.top = `${Math.round(r.bottom + gap)}px`;
+      panel.style.minWidth = `${Math.round(r.width)}px`;
+    }
+
+    function closePanel(): void {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      clearViewDropdownListeners();
+    }
+
+    function openPanel(): void {
+      clearViewDropdownListeners();
+      positionPanel();
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      const onDocMouseDown = (e: MouseEvent): void => {
+        if (panel.hidden) return;
+        if (!wrap.contains(e.target as Node)) closePanel();
+      };
+      const onDocKey = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape') closePanel();
+      };
+      const onScrollOrResize = (): void => {
+        closePanel();
+      };
+      document.addEventListener('mousedown', onDocMouseDown, true);
+      document.addEventListener('keydown', onDocKey, true);
+      window.addEventListener('scroll', onScrollOrResize, true);
+      window.addEventListener('resize', onScrollOrResize);
+      viewDropdownCleanup = () => {
+        document.removeEventListener('mousedown', onDocMouseDown, true);
+        document.removeEventListener('keydown', onDocKey, true);
+        window.removeEventListener('scroll', onScrollOrResize, true);
+        window.removeEventListener('resize', onScrollOrResize);
+      };
+    }
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (panel.hidden) openPanel();
+      else closePanel();
+    });
+
+    wrap.append(trigger, panel);
+    return wrap;
   }
 
   function openDayAgenda(list: NotionCalendarEvent[], anchorEl: HTMLElement): void {
@@ -423,6 +548,7 @@ export function renderNativeCalendar(
 
   function render(): void {
     clearPeeks();
+    clearViewDropdownListeners();
     toolbar.replaceChildren();
     gridScroll.replaceChildren();
 
@@ -468,24 +594,14 @@ export function renderNativeCalendar(
       head.className = 'nec-toolbar-mobile-head';
       head.appendChild(titleEl);
 
-      const sel = document.createElement('select');
-      sel.className = 'nec-view-select';
-      sel.setAttribute('aria-label', 'Calendar view');
-      for (const opt of viewChoices) {
-        const o = document.createElement('option');
-        o.value = opt.mode;
-        o.textContent = opt.label;
-        if (opt.mode === viewMode) o.selected = true;
-        sel.appendChild(o);
-      }
-      sel.addEventListener('change', () => {
-        viewMode = sel.value as CalendarViewMode;
+      const viewDd = createMobileViewDropdown(viewChoices, viewMode, (mode) => {
+        viewMode = mode;
         render();
       });
 
       const row = document.createElement('div');
       row.className = 'nec-toolbar-row nec-toolbar-nav';
-      row.append(todayBtn, prevBtn, sel, nextBtn);
+      row.append(todayBtn, prevBtn, viewDd, nextBtn);
       toolbar.append(head, row);
     } else {
       toolbar.className = 'nec-toolbar';
@@ -643,6 +759,7 @@ export function renderNativeCalendar(
   return {
     destroy: (): void => {
       mql.removeEventListener('change', onMql);
+      clearViewDropdownListeners();
       clearPeeks();
       mount.replaceChildren();
       mount.classList.remove('nec-root');
