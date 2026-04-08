@@ -10,5 +10,6 @@ export type { NotionEmbedLauncherOptions, NotionEmbedLauncherPosition, NotionEmb
 export type { NotionCalendarEvent } from './notion-calendar/event.js';
 export type { NotionCalendarPalette } from './calendar/palette.types.js';
 export { defaultNotionCalendarPalette, mergeNotionCalendarPalette, } from './calendar/palette.js';
+export { calendarVisualTokens, WEEKDAYS_SUN } from './calendar/notion-calendar-constants.js';
 export { isValidNotionUrl, normalizeNotionUrl, isEmbeddableNotionUrl, } from './utils.js';
 //# sourceMappingURL=index.d.ts.map

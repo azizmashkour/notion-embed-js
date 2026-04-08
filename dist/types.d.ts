@@ -35,7 +35,7 @@ export interface NotionEmbedOptions {
      */
     events?: NotionCalendarEvent[];
     /**
-     * Customize colors for `calendar-api` (partial override of the default CHAI-style palette).
+     * Customize colors for `calendar-api` (partial override of the default palette).
      */
     calendarPalette?: Partial<NotionCalendarPalette>;
     /**

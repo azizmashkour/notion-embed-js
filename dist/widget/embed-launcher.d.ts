@@ -6,7 +6,7 @@ export interface MountEmbedLauncherContext {
     segmentSupport: boolean;
 }
 /**
- * Floating launcher + embed panel using Radix Popover (modal), matching chai.org overlay patterns.
+ * Floating launcher + embed panel using Radix Popover (modal).
  */
 export declare function mountEmbedLauncher(doc: Document, cfg: ResolvedLauncherSpec, buildInner: () => RenderedEmbed, context: MountEmbedLauncherContext): RenderedEmbed & {
     open: () => void;

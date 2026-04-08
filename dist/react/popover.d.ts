@@ -1,5 +1,5 @@
 /**
- * Radix Popover shell — visuals match chai.org src/components/ui/popover.tsx (pre–GitHub package).
+ * Radix Popover shell — Fluent-style border (#edebe9) and layered shadow.
  */
 import * as React from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';

@@ -1,7 +1,6 @@
 import type { NotionCalendarEvent } from '../notion-calendar/event.js';
-export declare function DayAgendaPopover({ events, title, anchorRect, onExit, }: {
+export declare function DayAgendaPopover({ events, anchorRect, onExit, }: {
     events: NotionCalendarEvent[];
-    title: string;
     anchorRect: DOMRect;
     onExit: () => void;
 }): import("react/jsx-runtime").JSX.Element;

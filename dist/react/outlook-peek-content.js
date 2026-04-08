@@ -1,8 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { formatOutlookWhen, outlookPeekNotesBody } from '../calendar/calendar-utils.js';
+import { calendarVisualTokens } from '../calendar/notion-calendar-constants.js';
 import { IconClock, IconExternalLink, IconFileText, IconMapPin } from './icons.js';
 import { srOnly } from './styles.js';
-const OUTLOOK_TOP_BAR = '#0078d4';
+const PEEK_BRAND = calendarVisualTokens.blue;
 const iconMuted = '#605e5c';
 const textPrimary = '#323130';
 const textStrong = '#242424';
@@ -10,7 +11,7 @@ const borderHairline = '#edebe9';
 export function OutlookPeekContent({ event }) {
     const notesBody = outlookPeekNotesBody(event.description);
     const link = event.linkUrl;
-    return (_jsxs("div", { style: { display: 'flex', flexDirection: 'column' }, children: [_jsx("div", { style: { height: 8, flexShrink: 0, background: OUTLOOK_TOP_BAR }, "aria-hidden": true }), _jsxs("div", { style: { padding: '12px 16px 16px' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'flex-start', gap: 8 }, children: [_jsx("h4", { style: {
+    return (_jsxs("div", { style: { display: 'flex', flexDirection: 'column' }, children: [_jsx("div", { style: { height: 8, flexShrink: 0, background: PEEK_BRAND }, "aria-hidden": true }), _jsxs("div", { style: { padding: '12px 16px 16px' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'flex-start', gap: 8 }, children: [_jsx("h4", { style: {
                                     minWidth: 0,
                                     flex: 1,
                                     margin: 0,
@@ -26,7 +27,7 @@ export function OutlookPeekContent({ event }) {
                                     padding: 6,
                                     color: iconMuted,
                                     textDecoration: 'none',
-                                }, "aria-label": "Open link", title: "Open link", onClick: (e) => e.stopPropagation(), onMouseEnter: (e) => {
+                                }, "aria-label": "Read more", title: "Read more", onClick: (e) => e.stopPropagation(), onMouseEnter: (e) => {
                                     e.currentTarget.style.background = '#f3f2f1';
                                     e.currentTarget.style.color = textStrong;
                                 }, onMouseLeave: (e) => {
@@ -64,8 +65,8 @@ export function OutlookPeekContent({ event }) {
                                 gap: 6,
                                 fontSize: 14,
                                 fontWeight: 600,
-                                color: OUTLOOK_TOP_BAR,
+                                color: PEEK_BRAND,
                                 textDecoration: 'none',
-                            }, children: ["Open link", _jsx(IconExternalLink, { "aria-hidden": true, size: 14, strokeWidth: 1.75 })] }) })) : null] })] }));
+                            }, children: ["Read more", _jsx(IconExternalLink, { "aria-hidden": true, size: 14, strokeWidth: 1.75 })] }) })) : null] })] }));
 }
 //# sourceMappingURL=outlook-peek-content.js.map

@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/** Lucide-compatible 18px outline icons (chai.org CalendarEventPeek). */
+/** Lucide-compatible 18px outline icons for calendar peek rows. */
 export function IconClock({ className, ...rest }) {
     return (_jsxs("svg", { xmlns: "http://www.w3.org/2000/svg", width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round", className: className, ...rest, children: [_jsx("circle", { cx: "12", cy: "12", r: "10" }), _jsx("path", { d: "M12 6v6l4 2" })] }));
 }

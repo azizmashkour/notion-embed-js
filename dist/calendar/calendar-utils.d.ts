@@ -6,8 +6,8 @@ export declare function dayKeysForEvent(ev: NotionCalendarEvent): string[];
 export declare function buildEventsByDay(events: NotionCalendarEvent[]): Map<string, NotionCalendarEvent[]>;
 export declare function monthCells(year: number, monthIndex: number): (number | null)[];
 export declare function formatEventTime(iso: string): string;
-/** Plain-text notes line for Outlook-style peek (matches chai.org CalendarEventPeek). */
+/** Plain-text notes line for Outlook-style peek when description is empty. */
 export declare function outlookPeekNotesBody(description: string | undefined): string;
-/** Outlook-style “when” line (locale-aware), from chai.org CalendarEventPeek. */
+/** Outlook-style “when” line (locale-aware). */
 export declare function formatOutlookWhen(ev: NotionCalendarEvent): string;
 //# sourceMappingURL=calendar-utils.d.ts.map

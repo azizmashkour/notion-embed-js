@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { EmbedLauncherRadixView, } from '../react/embed-launcher-view.js';
 /**
- * Floating launcher + embed panel using Radix Popover (modal), matching chai.org overlay patterns.
+ * Floating launcher + embed panel using Radix Popover (modal).
  */
 export function mountEmbedLauncher(doc, cfg, buildInner, context) {
     let pendingSegment = null;

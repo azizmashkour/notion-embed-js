@@ -2,7 +2,7 @@ type IconProps = {
     className?: string;
     'aria-hidden'?: boolean;
 };
-/** Lucide-compatible 18px outline icons (chai.org CalendarEventPeek). */
+/** Lucide-compatible 18px outline icons for calendar peek rows. */
 export declare function IconClock({ className, ...rest }: IconProps): import("react/jsx-runtime").JSX.Element;
 export declare function IconMapPin({ className, ...rest }: IconProps): import("react/jsx-runtime").JSX.Element;
 export declare function IconFileText({ className, ...rest }: IconProps): import("react/jsx-runtime").JSX.Element;
