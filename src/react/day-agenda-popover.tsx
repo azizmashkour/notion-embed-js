@@ -42,11 +42,7 @@ export function DayAgendaPopover({
         align="start"
         sideOffset={8}
         collisionPadding={{ top: 16, right: 16, bottom: 16, left: 16 }}
-        aria-label={
-          events.length === 1
-            ? events[0]!.title
-            : `${events.length} calendar events`
-        }
+        aria-label={events.length === 1 ? events[0]!.title : `${events.length} calendar events`}
         style={{
           ...popoverContentBase,
           maxHeight: 'min(85vh, 640px)',

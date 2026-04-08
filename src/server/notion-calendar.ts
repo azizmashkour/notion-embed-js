@@ -384,20 +384,17 @@ function mergeConfig(
     explicit?.dataSourceId ??
     (trimEnvValue(process.env.NOTION_CALENDAR_DATA_SOURCE_ID) || undefined);
   const dateProperty =
-    explicit?.dateProperty ??
-    (process.env.NOTION_CALENDAR_DATE_PROPERTY?.trim() || undefined);
+    explicit?.dateProperty ?? (process.env.NOTION_CALENDAR_DATE_PROPERTY?.trim() || undefined);
   const descriptionProperty =
     explicit?.descriptionProperty ??
     (process.env.NOTION_CALENDAR_DESCRIPTION_PROPERTY?.trim() || undefined);
   const linkProperty =
-    explicit?.linkProperty ??
-    (process.env.NOTION_CALENDAR_LINK_PROPERTY?.trim() || undefined);
+    explicit?.linkProperty ?? (process.env.NOTION_CALENDAR_LINK_PROPERTY?.trim() || undefined);
 
   const relaxedQuery =
     explicit?.relaxedQuery !== undefined
       ? explicit.relaxedQuery
-      : process.env.NOTION_CALENDAR_RELAXED_QUERY === '1' ||
-        process.env.NODE_ENV === 'development';
+      : process.env.NOTION_CALENDAR_RELAXED_QUERY === '1' || process.env.NODE_ENV === 'development';
 
   return {
     apiKey,

@@ -50,10 +50,7 @@ export function mergeNotionCalendarPalette(
   return m;
 }
 
-export function applyPaletteToElement(
-  el: HTMLElement,
-  palette: NotionCalendarPalette
-): void {
+export function applyPaletteToElement(el: HTMLElement, palette: NotionCalendarPalette): void {
   const p = palette;
   el.style.setProperty('--nec-surface', p.surface);
   el.style.setProperty('--nec-border', p.border);

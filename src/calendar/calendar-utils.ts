@@ -1,4 +1,5 @@
 import type { NotionCalendarEvent } from '../notion-calendar/event.js';
+import type { CalendarViewMode } from './notion-calendar-constants.js';
 
 export function parseNotionDate(iso: string): Date {
   if (iso.length <= 10) {
@@ -14,6 +15,104 @@ export function toLocalDateKey(d: Date): string {
 
 export function startOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+export function addDays(d: Date, n: number): Date {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() + n);
+  return x;
+}
+
+/** Week starting Sunday (US calendar). */
+export function startOfWeekSunday(d: Date): Date {
+  const s = startOfDay(d);
+  s.setDate(s.getDate() - s.getDay());
+  return s;
+}
+
+/** ISO work week starting Monday. */
+export function startOfWeekMonday(d: Date): Date {
+  const s = startOfDay(d);
+  const dow = s.getDay();
+  const offset = dow === 0 ? -6 : 1 - dow;
+  s.setDate(s.getDate() + offset);
+  return s;
+}
+
+/**
+ * Timed segment on a local calendar day as top/height % of 24h (for day timeline).
+ * Returns null for all-day-only rows or if event does not intersect the day.
+ */
+export function timedSegmentPercentOnDay(
+  ev: NotionCalendarEvent,
+  day: Date
+): { topPct: number; heightPct: number } | null {
+  const key = toLocalDateKey(day);
+  if (!dayKeysForEvent(ev).includes(key)) return null;
+  if (ev.start.length <= 10) return null;
+  const start = parseNotionDate(ev.start);
+  const end =
+    ev.end && ev.end.length > 10 ? parseNotionDate(ev.end) : new Date(start.getTime() + 3600000);
+  const dayStart = startOfDay(day);
+  const dayEnd = addDays(dayStart, 1);
+  const segStart = start < dayStart ? dayStart : start;
+  const segEnd = end > dayEnd ? dayEnd : end;
+  if (segEnd <= segStart) return null;
+  const startMin = (segStart.getTime() - dayStart.getTime()) / 60000;
+  const durMin = (segEnd.getTime() - segStart.getTime()) / 60000;
+  return {
+    topPct: (startMin / 1440) * 100,
+    heightPct: Math.max((durMin / 1440) * 100, 1.25),
+  };
+}
+
+export function allDayEventsOnDay(events: NotionCalendarEvent[], day: Date): NotionCalendarEvent[] {
+  const key = toLocalDateKey(day);
+  return events.filter((ev) => dayKeysForEvent(ev).includes(key) && ev.start.length <= 10);
+}
+
+export function timedEventsOnDay(events: NotionCalendarEvent[], day: Date): NotionCalendarEvent[] {
+  const key = toLocalDateKey(day);
+  return events.filter((ev) => dayKeysForEvent(ev).includes(key) && ev.start.length > 10);
+}
+
+/** Toolbar title for the active view (locale-aware). */
+export function formatCalendarPeriodTitle(mode: CalendarViewMode, focusDate: Date): string {
+  if (mode === 'day') {
+    return new Intl.DateTimeFormat(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }).format(focusDate);
+  }
+  if (mode === 'month') {
+    return new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(
+      new Date(focusDate.getFullYear(), focusDate.getMonth(), 1)
+    );
+  }
+  if (mode === 'week') {
+    const start = startOfWeekSunday(focusDate);
+    const end = addDays(start, 6);
+    const md = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' });
+    const y = end.getFullYear();
+    if (start.getFullYear() !== y) {
+      return `${md.format(start)}, ${start.getFullYear()} – ${md.format(end)}, ${y}`;
+    }
+    return `${md.format(start)} – ${md.format(end)}, ${y}`;
+  }
+  const start = startOfWeekMonday(focusDate);
+  const end = addDays(start, 4);
+  const md = new Intl.DateTimeFormat(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+  const y = end.getFullYear();
+  if (start.getFullYear() !== y) {
+    return `${md.format(start)}, ${start.getFullYear()} – ${md.format(end)}, ${y}`;
+  }
+  return `${md.format(start)} – ${md.format(end)}, ${y}`;
 }
 
 export function dayKeysForEvent(ev: NotionCalendarEvent): string[] {

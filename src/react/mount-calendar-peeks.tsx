@@ -1,11 +1,22 @@
-import { createRoot, type Root } from 'react-dom/client';
+import type { CSSProperties } from 'react';
+import { createRoot } from 'react-dom/client';
 import type { NotionCalendarEvent } from '../notion-calendar/event.js';
 import { CalendarChipPopover } from './calendar-chip-popover.js';
 import { DayAgendaPopover } from './day-agenda-popover.js';
 
-export function mountCalendarChipPeek(host: HTMLElement, event: NotionCalendarEvent): () => void {
+export function mountCalendarChipPeek(
+  host: HTMLElement,
+  event: NotionCalendarEvent,
+  options?: { triggerClassName?: string; triggerStyle?: CSSProperties }
+): () => void {
   const root = createRoot(host);
-  root.render(<CalendarChipPopover event={event} />);
+  root.render(
+    <CalendarChipPopover
+      event={event}
+      triggerClassName={options?.triggerClassName}
+      triggerStyle={options?.triggerStyle}
+    />
+  );
   return () => {
     root.unmount();
   };
@@ -23,8 +34,6 @@ export function mountDayAgendaPeek(
     root.unmount();
     host.remove();
   };
-  root.render(
-    <DayAgendaPopover events={events} anchorRect={anchorRect} onExit={exit} />
-  );
+  root.render(<DayAgendaPopover events={events} anchorRect={anchorRect} onExit={exit} />);
   return exit;
 }

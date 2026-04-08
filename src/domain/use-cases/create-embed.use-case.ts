@@ -37,8 +37,7 @@ export class CreateEmbedUseCase {
         );
       }
       const launcher = resolveLauncherSpec(options.launcher, mode);
-      const height =
-        options.height ?? CALENDAR_DEFAULT_HEIGHT;
+      const height = options.height ?? CALENDAR_DEFAULT_HEIGHT;
       const heightValue = typeof height === 'number' ? `${height}px` : height;
       const palette = mergeNotionCalendarPalette(options.calendarPalette);
       const wrapperStyles: Record<string, string> = {
@@ -76,8 +75,7 @@ export class CreateEmbedUseCase {
     }
 
     const height =
-      options.height ??
-      (mode === 'calendar' ? CALENDAR_DEFAULT_HEIGHT : DEFAULT_PAGE_HEIGHT);
+      options.height ?? (mode === 'calendar' ? CALENDAR_DEFAULT_HEIGHT : DEFAULT_PAGE_HEIGHT);
     const width = options.width ?? '100%';
     const widthValue = typeof width === 'number' ? `${width}px` : width;
     const heightValue = typeof height === 'number' ? `${height}px` : height;

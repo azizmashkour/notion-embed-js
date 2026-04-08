@@ -24,16 +24,11 @@ export class DomEmbedRendererAdapter implements EmbedRendererPort {
     };
 
     if (spec.launcher) {
-      return mountEmbedLauncher(
-        document,
-        spec.launcher,
-        buildInner,
-        {
-          initialSegment: options.initialSegment ?? null,
-          mountContainer: mountContainer ?? null,
-          segmentSupport: Boolean(options.segments && options.getSegmentUrl),
-        }
-      );
+      return mountEmbedLauncher(document, spec.launcher, buildInner, {
+        initialSegment: options.initialSegment ?? null,
+        mountContainer: mountContainer ?? null,
+        segmentSupport: Boolean(options.segments && options.getSegmentUrl),
+      });
     }
 
     return buildInner();
@@ -97,9 +92,7 @@ export class DomEmbedRendererAdapter implements EmbedRendererPort {
         ? (segment: string): void => {
             const url = getSegmentUrl(segment);
             if (!url) {
-              console.warn(
-                `[notion-embed-js] Segment "${segment}" not found, keeping current`
-              );
+              console.warn(`[notion-embed-js] Segment "${segment}" not found, keeping current`);
               return;
             }
             updateUrl(url);
@@ -107,9 +100,7 @@ export class DomEmbedRendererAdapter implements EmbedRendererPort {
           }
         : undefined;
 
-    const getActiveSegment = segments
-      ? (): string | null => currentSegment
-      : undefined;
+    const getActiveSegment = segments ? (): string | null => currentSegment : undefined;
 
     return {
       element: wrapper,

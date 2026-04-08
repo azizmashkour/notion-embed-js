@@ -17,8 +17,7 @@ export function createEmbed(
   const segmentResolver = new OptionsSegmentResolverAdapter(options);
   const useCase = new CreateEmbedUseCase(urlValidator, segmentResolver);
 
-  const { spec, segments, initialSegment, getSegmentUrl } =
-    useCase.execute(options);
+  const { spec, segments, initialSegment, getSegmentUrl } = useCase.execute(options);
 
   const rendered = embedRenderer.render(
     spec,

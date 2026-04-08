@@ -1,9 +1,5 @@
 import type { UrlValidatorPort } from '../../ports/out/url-validator.port.js';
-import {
-  normalizeNotionUrl,
-  isValidNotionUrl,
-  isEmbeddableNotionUrl,
-} from '../../utils.js';
+import { normalizeNotionUrl, isValidNotionUrl, isEmbeddableNotionUrl } from '../../utils.js';
 
 /**
  * Adapter: Standard Notion URL validation

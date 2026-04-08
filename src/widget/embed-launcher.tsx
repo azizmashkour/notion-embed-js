@@ -1,10 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import type { RenderedEmbed } from '../ports/out/embed-renderer.port.js';
-import {
-  EmbedLauncherRadixView,
-  type EmbedLauncherBridge,
-} from '../react/embed-launcher-view.js';
+import { EmbedLauncherRadixView, type EmbedLauncherBridge } from '../react/embed-launcher-view.js';
 import type { ResolvedLauncherSpec } from './launcher-config.js';
 
 export interface MountEmbedLauncherContext {
@@ -55,8 +52,7 @@ export function mountEmbedLauncher(
     );
   });
 
-  const buttonParent =
-    cfg.mountTarget === 'body' ? doc.body : (context.mountContainer ?? doc.body);
+  const buttonParent = cfg.mountTarget === 'body' ? doc.body : (context.mountContainer ?? doc.body);
   buttonParent.appendChild(host);
 
   const destroy = (): void => {
@@ -67,21 +63,19 @@ export function mountEmbedLauncher(
     host.remove();
   };
 
-  const setSegment =
-    context.segmentSupport
-      ? (segment: string): void => {
-          pendingSegment = segment;
-          bridge.setSegment?.(segment);
-        }
-      : undefined;
+  const setSegment = context.segmentSupport
+    ? (segment: string): void => {
+        pendingSegment = segment;
+        bridge.setSegment?.(segment);
+      }
+    : undefined;
 
-  const getActiveSegment =
-    context.segmentSupport
-      ? (): string | null => {
-          if (bridge.getActiveSegment) return bridge.getActiveSegment();
-          return pendingSegment ?? context.initialSegment;
-        }
-      : undefined;
+  const getActiveSegment = context.segmentSupport
+    ? (): string | null => {
+        if (bridge.getActiveSegment) return bridge.getActiveSegment();
+        return pendingSegment ?? context.initialSegment;
+      }
+    : undefined;
 
   const updateUrl = (url: string): void => {
     bridge.getInner()?.updateUrl?.(url);

@@ -1,10 +1,6 @@
 import type { WidgetMode } from '../types.js';
 
-export type NotionEmbedLauncherPosition =
-  | 'bottom-right'
-  | 'bottom-left'
-  | 'top-right'
-  | 'top-left';
+export type NotionEmbedLauncherPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
 
 /**
  * Floating launcher (Intercom-style) that opens a panel with the embed.

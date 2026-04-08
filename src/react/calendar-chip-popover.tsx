@@ -4,13 +4,23 @@ import { popoverContentBase } from './styles.js';
 import { Popover, PopoverContent, PopoverTrigger } from './popover.js';
 import { OutlookPeekContent } from './outlook-peek-content.js';
 
-export function CalendarChipPopover({ event }: { event: NotionCalendarEvent }) {
+export function CalendarChipPopover({
+  event,
+  triggerClassName = 'nec-event-chip',
+  triggerStyle,
+}: {
+  event: NotionCalendarEvent;
+  /** Default: month/week grid chip. Use `nec-timeline-event` + inline styles for day timeline. */
+  triggerClassName?: string;
+  triggerStyle?: React.CSSProperties;
+}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="nec-event-chip"
+          className={triggerClassName}
+          style={triggerStyle}
           onClick={(e) => e.stopPropagation()}
         >
           {event.title}
