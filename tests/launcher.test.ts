@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createEmbed } from '../src/index.js';
 
 describe('launcher widget', () => {
@@ -12,14 +12,11 @@ describe('launcher widget', () => {
   afterEach(() => {
     container.remove();
     document
-      .querySelectorAll('[data-notion-embed-launcher-backdrop]')
-      .forEach((el) => el.remove());
-    document
-      .querySelectorAll('[data-notion-embed-launcher-button]')
+      .querySelectorAll('[data-notion-embed-launcher-root]')
       .forEach((el) => el.remove());
   });
 
-  it('mounts floating button to body and skips container append when mountTarget is body', () => {
+  it('mounts floating button to body and skips container append when mountTarget is body', async () => {
     const url = 'https://workspace.notion.site/page-id';
     const { element, destroy, open, close, isOpen } = createEmbed(
       {
@@ -31,24 +28,27 @@ describe('launcher widget', () => {
 
     expect(container.querySelector('[data-notion-embed]')).toBeNull();
     expect(document.body.contains(element)).toBe(true);
-    expect(element.getAttribute('data-notion-embed-launcher-button')).toBe('');
+    expect(element.querySelector('[data-notion-embed-launcher-button]')).toBeTruthy();
     expect(open).toBeDefined();
     expect(close).toBeDefined();
     expect(isOpen?.()).toBe(false);
 
     open!();
-    expect(isOpen?.()).toBe(true);
-    const backdrop = document.querySelector('[data-notion-embed-launcher-backdrop]');
-    expect(backdrop).toBeTruthy();
-    expect((backdrop as HTMLElement).style.display).toBe('flex');
-    expect(backdrop?.querySelector('iframe')?.getAttribute('src')).toBe(url);
+    await vi.waitFor(() => expect(isOpen?.()).toBe(true));
+    expect(document.querySelector('[data-notion-embed-launcher-panel]')).toBeTruthy();
+    await vi.waitFor(() => {
+      const iframe = document.querySelector(
+        '[data-notion-embed-launcher-body] iframe'
+      ) as HTMLIFrameElement | null;
+      expect(iframe?.getAttribute('src')).toBe(url);
+    });
 
     close!();
     expect(isOpen?.()).toBe(false);
 
     destroy();
     expect(document.body.contains(element)).toBe(false);
-    expect(document.querySelector('[data-notion-embed-launcher-backdrop]')).toBeNull();
+    expect(document.querySelector('[data-notion-embed-launcher-root]')).toBeNull();
   });
 
   it('mounts button into container when mountTarget is container', () => {
@@ -67,7 +67,7 @@ describe('launcher widget', () => {
     destroy();
   });
 
-  it('works with calendar-api mode', () => {
+  it('works with calendar-api mode', async () => {
     const { element, open, destroy } = createEmbed({
       mode: 'calendar-api',
       events: [{ id: '1', title: 'Ev', start: '2026-04-08', end: null }],
@@ -76,7 +76,13 @@ describe('launcher widget', () => {
 
     expect(document.body.contains(element)).toBe(true);
     open!();
-    expect(document.querySelector('.nec-root')).toBeTruthy();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector(
+          '[data-notion-embed-launcher-body] [data-notion-embed="calendar-api"]'
+        )
+      ).toBeTruthy()
+    );
     destroy();
   });
 });

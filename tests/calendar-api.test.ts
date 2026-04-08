@@ -13,7 +13,7 @@ describe('calendar-api mode', () => {
     container.remove();
   });
 
-  it('renders native calendar without iframe', () => {
+  it('renders native calendar without iframe', async () => {
     const { element, destroy } = createEmbed(
       {
         mode: 'calendar-api',
@@ -32,7 +32,10 @@ describe('calendar-api mode', () => {
     expect(element.getAttribute('data-notion-embed')).toBe('calendar-api');
     expect(element.querySelector('iframe')).toBeNull();
     expect(element.classList.contains('nec-root')).toBe(true);
-    expect(element.textContent).toContain('Test event');
+    await vi.waitFor(() => {
+      const labels = [...element.querySelectorAll('button')].map((b) => b.textContent ?? '');
+      expect(labels.some((t) => t.includes('Test event'))).toBe(true);
+    });
 
     destroy();
   });
