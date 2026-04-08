@@ -8,20 +8,20 @@ Embed Notion public pages and calendar views into any website. Supports **page**
 - **Calendar embed (iframe)** – Published Notion calendar view, full-width in its container
 - **Calendar API (native UI)** – Server-side fetch via official Notion client; browser renders a month grid (no API key in the client)
 - **Color palette** – Optional `calendarPalette` / `defaultNotionCalendarPalette` for the native calendar
-- **Floating launcher** – Optional `launcher: true` (or config): rounded corner button fixed on the viewport; opens a large modal panel with the same embed (page, iframe calendar, or `calendar-api`). Omit `launcher` for normal **inline** layout in your container
+- **Floating launcher** – Optional `launcher: true` (or config): rounded corner button fixed on the viewport; opens a **Radix UI Popover** (modal) with the same embed, using the same border/shadow treatment as the chai.org popover primitive
+- **Outlook-style event peek** – In **`calendar-api`** mode, each event chip opens an **anchored `@radix-ui/react-popover`** whose layout matches the former **chai.org `CalendarEventPeek`** sample (blue top bar, Clock / Location / Notes rows, optional link row—using your event’s `linkUrl`, not a Notion page URL)
 - **TypeScript** – Full type definitions included
-- **Framework agnostic (browser)** – Vanilla DOM; works with React, Vue, etc.
 
-The published bundle depends on **`@notionhq/client`** only when you import **`notion-embed-js/server`** (Node/server). The default browser entry does not load the Notion client.
+**Peer dependencies (browser):** install **`react`**, **`react-dom`**, and **`@radix-ui/react-popover`** alongside this package. They power **`calendar-api`** (Outlook-style peeks) and **`launcher`** (modal panel). The main `createEmbed` bundle references that module graph, so your package manager should resolve those peers even if you only use iframe **page** / **calendar** mode (unused code may be tree-shaken by your bundler). The server entry **`notion-embed-js/server`** only needs **`@notionhq/client`**.
 
 ## Installation
 
 ```bash
-pnpm add notion-embed-js
+pnpm add notion-embed-js react react-dom @radix-ui/react-popover
 # or
-npm install notion-embed-js
+npm install notion-embed-js react react-dom @radix-ui/react-popover
 # or
-yarn add notion-embed-js
+yarn add notion-embed-js react react-dom @radix-ui/react-popover
 ```
 
 ### Local development (test without publishing)
@@ -473,8 +473,9 @@ src/
 ├── adapters/
 │   ├── in/           # Primary: createEmbed, embedInto (API entry points)
 │   └── out/          # Secondary: UrlValidatorAdapter, DomEmbedRendererAdapter, etc.
-├── calendar/         # Native month UI, palette, date helpers
-├── widget/           # Floating launcher + modal shell
+├── calendar/         # Native month grid (mounts Radix peeks via react/)
+├── react/            # Radix Popover, Outlook peek UI, launcher shell (chai.org–aligned)
+├── widget/           # Launcher mount (createRoot + Radix popover)
 ├── server/           # Notion API fetch (Node; uses @notionhq/client)
 ├── notion-calendar/  # Shared event type
 ├── types.ts
