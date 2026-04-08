@@ -2,7 +2,7 @@ import * as React from 'react';
 
 type IconProps = { className?: string; 'aria-hidden'?: boolean };
 
-/** Lucide-compatible 18px outline icons (chai.org CalendarEventPeek). */
+/** Lucide-compatible 18px outline icons for calendar peek rows. */
 export function IconClock({ className, ...rest }: IconProps) {
   return (
     <svg

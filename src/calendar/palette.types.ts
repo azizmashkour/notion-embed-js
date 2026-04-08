@@ -8,16 +8,28 @@ export interface NotionCalendarPalette {
   textStrong: string;
   muted: string;
   controlBorder: string;
-  /** Left accent / primary event tone */
+  /** Primary brand blue — peek header bar, “+N more”, today number */
+  blue: string;
+  /** Left border on event chips */
+  eventBarBorder: string;
+  /** @deprecated Prefer `blue` / `eventBarBorder`; kept for API compatibility */
   eventAccent: string;
   eventBarBg: string;
   eventBarHoverBg: string;
-  /** Cycle for stacked event chips (min 1) */
+  /** @deprecated Reserved; default month chips use `eventBarBorder` only */
   eventChipColors: string[];
-  /** Text on chips that use a solid accent background */
+  /** @deprecated Reserved for alternate chip treatments */
   eventChipTextOnAccent: string;
   peekBackdrop: string;
   buttonBg: string;
   buttonHoverBg: string;
-  todayRing: string;
+  /** Inset ring for “today” cell (`ring-blue/12`) */
+  todayInsetRing: string;
+  todayCellBg: string;
+  todayBadgeBg: string;
+  todayBadgeRing: string;
+  moreLinkColor: string;
+  cardShadow: string;
+  rootRadius: string;
+  monthCellMinHeight: string;
 }

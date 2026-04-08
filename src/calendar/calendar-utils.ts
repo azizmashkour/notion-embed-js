@@ -71,15 +71,15 @@ export function formatEventTime(iso: string): string {
 }
 
 const PEEK_NOTES_FALLBACK =
-  'Agenda and other details are in Notion—open the page for the full notes.';
+  'Agenda and other details appear here when your database includes a notes or description column.';
 
-/** Plain-text notes line for Outlook-style peek (matches chai.org CalendarEventPeek). */
+/** Plain-text notes line for Outlook-style peek when description is empty. */
 export function outlookPeekNotesBody(description: string | undefined): string {
   const t = description?.trim();
   return t && t.length > 0 ? t : PEEK_NOTES_FALLBACK;
 }
 
-/** Outlook-style “when” line (locale-aware), from chai.org CalendarEventPeek. */
+/** Outlook-style “when” line (locale-aware). */
 export function formatOutlookWhen(ev: NotionCalendarEvent): string {
   const start = parseNotionDate(ev.start);
   const startDay = ev.start.slice(0, 10);

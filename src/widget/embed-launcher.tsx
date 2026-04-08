@@ -14,7 +14,7 @@ export interface MountEmbedLauncherContext {
 }
 
 /**
- * Floating launcher + embed panel using Radix Popover (modal), matching chai.org overlay patterns.
+ * Floating launcher + embed panel using Radix Popover (modal).
  */
 export function mountEmbedLauncher(
   doc: Document,

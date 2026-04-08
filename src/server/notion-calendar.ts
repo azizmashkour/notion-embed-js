@@ -30,7 +30,7 @@ export interface NotionCalendarServerConfig {
   linkProperty?: string;
   /**
    * If the date-filtered query returns no rows, fetch recent pages and filter locally
-   * (matches dev behavior in chai.org, or NOTION_CALENDAR_RELAXED_QUERY=1).
+   * (or set NOTION_CALENDAR_RELAXED_QUERY=1 via env).
    */
   relaxedQuery?: boolean;
   monthsBack?: number;

@@ -4,37 +4,15 @@ import { popoverContentBase } from './styles.js';
 import { Popover, PopoverContent, PopoverTrigger } from './popover.js';
 import { OutlookPeekContent } from './outlook-peek-content.js';
 
-export function CalendarChipPopover({
-  event,
-  chipStyle,
-}: {
-  event: NotionCalendarEvent;
-  chipStyle: React.CSSProperties;
-}) {
-  const buttonStyle: React.CSSProperties = {
-    display: 'block',
-    width: '100%',
-    textAlign: 'left',
-    fontSize: 11,
-    lineHeight: 1.35,
-    padding: '2px 6px',
-    marginTop: 2,
-    borderRadius: 4,
-    border: 'none',
-    borderLeftWidth: 3,
-    borderLeftStyle: 'solid',
-    cursor: 'pointer',
-    fontFamily: 'inherit',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    ...chipStyle,
-  };
-
+export function CalendarChipPopover({ event }: { event: NotionCalendarEvent }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button type="button" style={buttonStyle} onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="nec-event-chip"
+          onClick={(e) => e.stopPropagation()}
+        >
           {event.title}
         </button>
       </PopoverTrigger>

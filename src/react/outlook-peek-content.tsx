@@ -1,13 +1,14 @@
 /**
- * Outlook calendar item peek body — matches chai.org CalendarEventPeek layout.
+ * Outlook-style event detail body for the anchored popover.
  */
 import * as React from 'react';
 import type { NotionCalendarEvent } from '../notion-calendar/event.js';
 import { formatOutlookWhen, outlookPeekNotesBody } from '../calendar/calendar-utils.js';
+import { calendarVisualTokens } from '../calendar/notion-calendar-constants.js';
 import { IconClock, IconExternalLink, IconFileText, IconMapPin } from './icons.js';
 import { srOnly } from './styles.js';
 
-const OUTLOOK_TOP_BAR = '#0078d4';
+const PEEK_BRAND = calendarVisualTokens.blue;
 const iconMuted = '#605e5c';
 const textPrimary = '#323130';
 const textStrong = '#242424';
@@ -19,7 +20,7 @@ export function OutlookPeekContent({ event }: { event: NotionCalendarEvent }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ height: 8, flexShrink: 0, background: OUTLOOK_TOP_BAR }} aria-hidden />
+      <div style={{ height: 8, flexShrink: 0, background: PEEK_BRAND }} aria-hidden />
 
       <div style={{ padding: '12px 16px 16px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
@@ -50,8 +51,8 @@ export function OutlookPeekContent({ event }: { event: NotionCalendarEvent }) {
                 color: iconMuted,
                 textDecoration: 'none',
               }}
-              aria-label="Open link"
-              title="Open link"
+              aria-label="Read more"
+              title="Read more"
               onClick={(e) => e.stopPropagation()}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f3f2f1';
@@ -149,11 +150,11 @@ export function OutlookPeekContent({ event }: { event: NotionCalendarEvent }) {
                 gap: 6,
                 fontSize: 14,
                 fontWeight: 600,
-                color: OUTLOOK_TOP_BAR,
+                color: PEEK_BRAND,
                 textDecoration: 'none',
               }}
             >
-              Open link
+              Read more
               <IconExternalLink aria-hidden size={14} strokeWidth={1.75} />
             </a>
           </div>
