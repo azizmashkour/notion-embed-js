@@ -42,6 +42,27 @@ Thank you for your interest in contributing! This document provides guidelines f
 - Add or update tests in the `tests/` directory
 - Ensure all tests pass: `pnpm test`
 - Ensure the build succeeds: `pnpm build`
+- For **user-visible changes** (features, bug fixes, breaking API changes, or notable behavior changes), add a **changeset** so `CHANGELOG.md` stays accurate (see below).
+
+## Versioning and changelog
+
+This repo uses [**Changesets**](https://github.com/changesets/changesets) to manage semver and `CHANGELOG.md`.
+
+**When you open a PR that should appear in the changelog**, run:
+
+```bash
+pnpm changeset
+```
+
+Choose the bump type (patch / minor / major), select `notion-embed-js`, and write a short summary for consumers (plain sentences work best; avoid starting lines with `-`, since the changelog formatter adds bullets). Commit the generated file under `.changeset/` with your other changes.
+
+**When cutting a release** (maintainers):
+
+1. Merge PRs that include changesets (or add any missing changesets on `main`).
+2. Run `pnpm version-packages` — updates `package.json` versions and folds pending changesets into `CHANGELOG.md`.
+3. Commit the version + changelog updates, tag if you use tags, then run `pnpm release` to publish to npm (requires registry auth).
+
+Scripts: `pnpm changeset` (add entry), `pnpm version-packages` (apply versions), `pnpm release` (build + `changeset publish`).
 
 ## Submitting Changes
 

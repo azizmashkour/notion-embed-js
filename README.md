@@ -2,6 +2,8 @@
 
 Embed Notion public pages and calendar views into any website. Supports **page** and **calendar** iframe embeds (published `notion.site` URLs), plus **calendar-api**: a native month calendar driven by events you fetch on the server with `NOTION_API_KEY` and `NOTION_CALENDAR_DATABASE_ID`.
 
+Release history: [CHANGELOG.md](./CHANGELOG.md).
+
 ## Features
 
 - **Page embed** – Embed any public Notion page with configurable dimensions
