@@ -1,5 +1,6 @@
 import { applyPaletteToElement, mergeNotionCalendarPalette, } from './palette.js';
-import { buildEventsByDay, formatEventTime, monthCells, toLocalDateKey, } from './calendar-utils.js';
+import { buildEventsByDay, monthCells, toLocalDateKey, } from './calendar-utils.js';
+import { mountCalendarChipPeek, mountDayAgendaPeek, } from '../react/mount-calendar-peeks.js';
 const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const BASE_STYLES = `
 .nec-root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:14px;line-height:1.4;color:var(--nec-text);background:var(--nec-surface);border:1px solid var(--nec-border);border-radius:8px;box-sizing:border-box;display:flex;flex-direction:column;min-height:inherit;height:100%;overflow:hidden}
@@ -18,18 +19,7 @@ const BASE_STYLES = `
 .nec-cell--weekend:not(.nec-cell--muted){background:var(--nec-weekend-bg)}
 .nec-cell--today{box-shadow:inset 0 0 0 2px var(--nec-today-ring)}
 .nec-daynum{font-size:12px;font-weight:600;color:var(--nec-muted);margin-bottom:2px}
-.nec-chip{display:block;font-size:11px;padding:2px 6px;margin-top:2px;border-radius:4px;border-left:3px solid var(--nec-event-accent);background:var(--nec-event-bar-bg);color:var(--nec-text-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nec-chip:hover{background:var(--nec-event-bar-hover-bg)}
-.nec-more{font-size:11px;color:var(--nec-muted);margin-top:4px}
-.nec-peek{position:fixed;inset:0;background:var(--nec-peek-backdrop);display:flex;align-items:center;justify-content:center;padding:16px;z-index:99999;box-sizing:border-box}
-.nec-card{max-width:420px;width:100%;max-height:85vh;overflow:auto;background:var(--nec-surface);border:1px solid var(--nec-border);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:16px}
-.nec-card h3{margin:0 0 8px;font-size:18px;color:var(--nec-text-strong)}
-.nec-card p{margin:0 0 12px;color:var(--nec-text);white-space:pre-wrap}
-.nec-card a{color:var(--nec-event-accent);word-break:break-all}
-.nec-ev{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--nec-border)}
-.nec-ev:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.nec-ev time{color:var(--nec-muted);font-size:12px;display:block;margin-bottom:4px}
-.nec-close{margin-top:12px;width:100%}
+.nec-more{font-size:11px;color:var(--nec-muted);margin-top:4px;cursor:pointer}
 `;
 function chipAccentForEvent(ev, colors) {
     const n = Math.max(1, colors.length);
@@ -72,69 +62,19 @@ export function renderNativeCalendar(mount, options) {
     mount.appendChild(gridWrap);
     let viewYear = new Date().getFullYear();
     let viewMonth = new Date().getMonth();
+    const chipUnmounts = [];
+    let closeDayAgenda = null;
     const byDay = () => buildEventsByDay(options.events);
-    function openPeek(dayEvents, label) {
-        const backdrop = document.createElement('div');
-        backdrop.className = 'nec-peek';
-        applyPaletteToElement(backdrop, palette);
-        const card = document.createElement('div');
-        card.className = 'nec-card';
-        card.setAttribute('role', 'dialog');
-        card.setAttribute('aria-label', label);
-        const h = document.createElement('h3');
-        h.textContent = label;
-        card.appendChild(h);
-        for (const ev of dayEvents) {
-            const block = document.createElement('div');
-            block.className = 'nec-ev';
-            const timeEl = document.createElement('time');
-            const endPart = ev.end && ev.end !== ev.start
-                ? ` – ${formatEventTime(ev.end)}`
-                : '';
-            timeEl.textContent = `${formatEventTime(ev.start)}${endPart}`;
-            const t = document.createElement('div');
-            t.style.fontWeight = '600';
-            t.style.color = 'var(--nec-text-strong)';
-            t.textContent = ev.title;
-            block.append(timeEl, t);
-            if (ev.description) {
-                const p = document.createElement('p');
-                p.textContent = ev.description;
-                block.appendChild(p);
-            }
-            if (ev.linkUrl) {
-                const a = document.createElement('a');
-                a.href = ev.linkUrl;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                a.textContent = ev.linkUrl;
-                block.appendChild(a);
-            }
-            card.appendChild(block);
-        }
-        const closeBtn = document.createElement('button');
-        closeBtn.type = 'button';
-        closeBtn.className = 'nec-btn nec-close';
-        closeBtn.textContent = 'Close';
-        card.appendChild(closeBtn);
-        const close = () => {
-            backdrop.remove();
-            document.removeEventListener('keydown', onKey);
-        };
-        const onKey = (e) => {
-            if (e.key === 'Escape')
-                close();
-        };
-        document.addEventListener('keydown', onKey);
-        backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop)
-                close();
-        });
-        closeBtn.addEventListener('click', close);
-        backdrop.appendChild(card);
-        document.body.appendChild(backdrop);
+    function openDayAgenda(list, label, anchorEl) {
+        closeDayAgenda?.();
+        const rect = anchorEl.getBoundingClientRect();
+        closeDayAgenda = mountDayAgendaPeek(document, list, label, rect);
     }
     function renderGrid() {
+        chipUnmounts.forEach((u) => u());
+        chipUnmounts.length = 0;
+        closeDayAgenda?.();
+        closeDayAgenda = null;
         gridWrap.replaceChildren();
         const label = new Intl.DateTimeFormat(undefined, {
             month: 'long',
@@ -187,35 +127,37 @@ export function renderNativeCalendar(mount, options) {
             cell.appendChild(num);
             const list = map.get(dateKey) ?? [];
             const maxShow = 3;
+            const dayTitle = new Intl.DateTimeFormat(undefined, {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+            }).format(cellDate);
             for (let j = 0; j < Math.min(maxShow, list.length); j++) {
                 const ev = list[j];
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'nec-chip';
-                chip.style.borderLeftColor = chipAccentForEvent(ev, chipColors);
-                chip.style.background = palette.eventBarBg;
-                chip.style.color = palette.textStrong;
-                chip.textContent = ev.title;
-                chip.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openPeek([ev], ev.title);
+                const wrap = document.createElement('div');
+                wrap.style.display = 'block';
+                const unmount = mountCalendarChipPeek(wrap, ev, {
+                    borderLeftColor: chipAccentForEvent(ev, chipColors),
+                    background: palette.eventBarBg,
+                    color: palette.textStrong,
                 });
-                cell.appendChild(chip);
+                chipUnmounts.push(unmount);
+                cell.appendChild(wrap);
             }
             if (list.length > maxShow) {
                 const more = document.createElement('div');
                 more.className = 'nec-more';
                 more.textContent = `+${list.length - maxShow} more`;
+                more.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openDayAgenda(list, dayTitle, cell);
+                });
                 cell.appendChild(more);
             }
             if (list.length > 0) {
                 cell.addEventListener('click', () => {
-                    openPeek(list, new Intl.DateTimeFormat(undefined, {
-                        weekday: 'long',
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }).format(cellDate));
+                    openDayAgenda(list, dayTitle, cell);
                 });
             }
             weekRow.appendChild(cell);
@@ -250,6 +192,10 @@ export function renderNativeCalendar(mount, options) {
     renderGrid();
     return {
         destroy: () => {
+            chipUnmounts.forEach((u) => u());
+            chipUnmounts.length = 0;
+            closeDayAgenda?.();
+            closeDayAgenda = null;
             mount.replaceChildren();
             mount.classList.remove('nec-root');
             mount.removeAttribute('style');
